@@ -1,0 +1,139 @@
+% !TeX program=lualatex
+
+%Requires lualatex or xelatex and installed fontss
+\documentclass[aspectratio=169,t]{beamer}
+\usetheme{37c3}
+
+% in case you want to use pixelarticons
+\usepackage{37c3-pixelarticons-svgpaths}
+
+\usepackage{layout}
+
+%local definitions, generally not necessary
+\newcommand*{\code}[1]{\texttt{#1}}
+
+\graphicspath{{.}{resources/}}
+
+\title{\texorpdfstring{{\includegraphics[height=.7\ht\strutbox]{37c3-logo-reduced}}}{37c3}-beamer}
+\subtitle{Unlocked \LaTeX{} beamer}
+\author{marei \email{chaos@texhackse.de}}
+
+\titlegraphic{\includegraphics[height=2cm]{dithered-squirrel}}
+\logo{\includegraphics[width=2cm]{37c3-logo-full}}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Number Examples}
+
+\NumberItem{123}{Items}
+\NumberItem{42}{People}
+\NumberItem{1337}{Cookies}
+
+\NumberItem{0}{\pixelarticon{bug}}
+
+\end{frame}
+
+\begin{frame}{Columns}
+	\begin{columns}[onlytextwidth]
+		\begin{column}{.5\linewidth}
+		\emph{Text Text Text Text }
+		\end{column}
+		\begin{column}{.5\linewidth}
+		\begin{itemize}
+			\item item
+			\begin{itemize}
+				\item item
+			\end{itemize}
+		\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}[rightimage*={\includegraphics{example-image}}]{Image right – autoscale}
+	Text reduced to half paperwidth
+\end{frame}
+
+
+\begin{frame}[image={\includegraphics{example-image}}]{Brachground image}
+Inhalt
+\end{frame}
+
+
+\begin{frame}[image*={\includegraphics{example-image}}]{Background image – autoscale}
+Inhalt
+\end{frame}
+
+\begin{frame}
+Frame ohne frametitle
+\end{frame}
+
+
+\begin{frame}{Frametitle}
+Content
+\end{frame}
+
+\newcommand*{\testcolor}[3]{\makebox[.3\linewidth][s]{#1 \textcolor{#1}{\rule{\ht\strutbox}{\ht\strutbox}}}\hfill}
+
+
+
+\begin{frame}{base colors - hierarchy}
+-1: \fcolorbox{37c3-gray1}{black}{\rule{\ht\strutbox}{0pt}\rule{0pt}{\ht\strutbox}} (frame using 37c3-gray1)
+
+\testcolor{37c3-gray0}{html}{ffffff}
+
+\testcolor{37c3-gray1}{html}{d9d9d9}
+
+\testcolor{37c3-gray2}{html}{aaaaaa}
+
+\testcolor{37c3-gray3}{html}{7a7a7a}
+
+\testcolor{37c3-gray4}{html}{202020}
+\end{frame}
+
+\begin{frame}{title}
+\testcolor{37c3-blue0}{html}{2d42ff}
+\testcolor{37c3-blue1}{html}{0b1575}
+
+\testcolor{37c3-red0}{html}{de4040}
+\testcolor{37c3-red1}{html}{561010}
+
+\testcolor{37c3-green0}{html}{79ff5e}
+\testcolor{37c3-green1}{html}{2b8d18}
+
+\testcolor{37c3-cyan0}{html}{29ffff}
+\testcolor{37c3-cyan1}{html}{006b6b}
+
+\testcolor{37c3-pink0}{html}{de37ff}
+\testcolor{37c3-pink1}{html}{66007a}
+
+\testcolor{37c3-yellow0}{html}{f6f675}
+\testcolor{37c3-yellow1}{html}{757501}
+\end{frame}
+
+
+\begin{frame}[fragile]{pixelarticons}
+The pixelarticons are available via 
+
+\begin{verbatim}
+\pixelarticon{<icon name>}
+\end{verbatim}
+if the package \verb+37c3-pixelarticons-svgpaths+ has been loaded. 
+
+The following slides list them next to their name.
+
+The icons always use the current text color.
+\end{frame}
+
+\newcommand\showpixelarticon[1]{#1: \pixelarticon{#1}, }
+
+\begin{frame}[allowframebreaks]{pixelarticons listed}
+\UseName{clist_map_inline:nn} {
+	4k-box,4k,5g,ab-testing,ac,add-box-multiple,add-box,add-col,add-grid,add-row,alert,align-center,align-justify,align-left,align-right,analytics,anchor,android,animation,archive,arrow-bar-down,arrow-bar-left,arrow-bar-right,arrow-bar-up,arrow-down-box,arrow-down,arrow-left-box,arrow-left,arrow-right-box,arrow-right,arrows-horizontal,arrows-vertical,arrow-up-box,arrow-up,article-multiple,article,art-text,aspect-ratio,at,attachment,audio-device,avatar,backburger,battery-1,battery-2,battery-charging,battery-full,battery,bed,bitcoin,bluetooth,bookmarks,bookmark,book-open,book,briefcase-account,briefcase-check,briefcase-delete,briefcase-download,briefcase-minus,briefcase-plus,briefcase-search-1,briefcase-search,briefcase,briefcase-upload,bug,building-community,building-skyscraper,buildings,building,bulletlist,bullseye-arrow,bullseye,bus,cake,calculator,calendar-alert,calendar-arrow-left,calendar-arrow-right,calendar-check,calendar-export,calendar-grid,calendar-import,calendar-minus,calendar-month,calendar-multiple-check,calendar-multiple,calendar-plus,calendar-range,calendar-remove,calendar-search,calendar-sort-ascending,calendar-sort-descending,calendar,calendar-text,calendar-today,calendar-tomorrow,calendar-week-begin,calendar-weekend,calendar-week,camera-add,camera-alt,camera-face,camera,card-id,card-plus,card-stack,card,card-text,car,cart,cast,cellular-signal-0,cellular-signal-1,cellular-signal-2,cellular-signal-3,cellular-signal-off,chart-add,chart-bar,chart-delete,chart-minus,chart-multiple,chart,chat,checkbox-on,checkbox,check-double,checklist,check,chess,chevron-down,chevron-left,chevron-right,chevrons-horizontal,chevrons-vertical,chevron-up,circle,clipboard,clock,close-box,close,cloud-done,cloud-download,cloud-moon,cloud-sun,cloud,cloud-upload,cocktail,code,coffee-alt,coffee,coin,collapse,colors-swatch,command,comment,contact-delete,contact-multiple,contact-plus,contact,copy,corner-down-left,corner-down-right,corner-left-down,corner-left-up,corner-right-down,corner-right-up,corner-up-left,corner-up-right,credit-card-delete,credit-card-minus,credit-card-multiple,credit-card-plus,credit-card-settings,credit-card,credit-card-wireless,crop,cut,dashbaord,debug-check,debug-off,debug-pause,debug-play,debug-stop,debug,delete,deskphone,device-laptop,device-phone,devices,device-tablet,device-tv-smart,device-tv,device-vibrate,device-watch,dice,dollar,downasaur,download,draft,drag-and-drop,drop-area,drop-full,drop-half,drop,duplicate-alt,duplicate,edit-box,edit,euro,expand,external-link,eye-closed,eye,file-alt,file-delete,file-flash,file-minus,file-multiple,file-off,file-plus,file,fill-half,fill,flag,flatten,flip-to-back,flip-to-front,float-center,float-left,float-right,folder-minus,folder-plus,folder,folder-x,forwardburger,forward,frame-add,frame-check,frame-delete,frame-minus,frame,gamepad,gif,gift,git-branch,git-commit,git-merge,git-pull-request,gps,grid,group,hd,headphone,headset,heart,hidden,home,hourglass,hq,human-handsdown,human-handsup,human-height-alt,human-height,human-run,human,image-arrow-right,image-broken,image-delete,image-flash,image-frame,image-gallery,image-multiple,image-new,image-plus,image,inbox-all,inbox-full,inbox,info-box,invert,iso,kanban,keyboard,label-alt-multiple,label-alt,label-sharp,label,layout-align-bottom,layout-align-left,layout-align-right,layout-align-top,layout-columns,layout-distribute-horizontal,layout-distribute-vertical,layout-footer,layout-header,layout-rows,layout-sidebar-left,layout-sidebar-right,layout,link,list-box,list,loader,lock-open,lock,login,logout,luggage,mail-arrow-right,mail-check,mail-delete,mail-flash,mail-multiple,mail-off,mail,mail-unread,map,membercard,menu,message-arrow-left,message-arrow-right,message-bookmark,message-clock,message-delete,message-flash,message-image,message-minus,message-plus,message-processing,message-reply,message,message-text,minus,missed-call,modem,money,monitor,mood-happy,mood-neutral,mood-sad,moon-stars,moon-star,moon,more-horizontal,more-vertical,mouse,move,movie,music,next,note-delete,note-multiple,note-plus,notes-delete,notes-multiple,notes-plus,notes,note,notification-off,notification,open,paint-bucket,paperclip,pause,percent,picture-in-picture-alt,picture-in-picture,pin,pixelarticons,playlist,play,plus,power,prev,print,radio-handheld,radio-on,radio-signal,radio-tower,reciept-alt,reciept,redo,reload,remove-box-multiple,remove-box,repeat,reply-all,reply,rounded-corner,save,scale,script,script-text,scroll-horizontal,scroll-vertical,sd,search,section-copy,section-minus,section-plus,section,section-x,server,sharp-corner,shield-off,shield,ship,shopping-bag,shuffle,sliders-2,sliders,sort-alpabetic,sort-numeric,sort,speaker,speed-fast,speed-medium,speed-slow,spotlight,store,subscriptions,subtitles,suitcase,sun-alt,sun,switch,sync,table,tab,teach,tea,text-add,text-colums,text-search,text-wrap,timeline,toggle-left,toggle-right,tournament,track-changes,trash-alt,trash,trending-down,trending,trending-up,trophy,truck,undo,ungroup,unlink,upload,user-minus,user-plus,users,user,user-x,video-off,video,view-col,view-list,viewport-narrow,viewport-wide,visible,volume-1,volume-2,volume-3,volume-minus,volume-plus,volume,volume-vibrate,volume-x,wallet,warning-box,wind,zap,zoom-in,zoom-out
+} {\showpixelarticon{#1}}
+\end{frame}
+
+\end{document}

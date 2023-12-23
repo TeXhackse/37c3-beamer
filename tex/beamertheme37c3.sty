@@ -1,0 +1,338 @@
+\ProvidesPackage{beamertheme37c3}
+
+\PassOptionsToPackage{sectionpage=simple}{beamerinnerthememetropolis}
+
+\RequirePackage{fontspec}
+\RequirePackage{anyfontsize}
+
+\ExplSyntaxOn
+
+\tl_new:c {g_ptxcd_rocket_tl}
+\int_new:c {g_ptxcd_frametitle_int}
+\bool_new:c  {g_ptxcd_frametitle_bool}
+
+
+\RequirePackage{beamerthememetropolis}
+
+\ExplSyntaxOff
+
+\directlua{luaotfload.add_fallback
+("codefallback",
+	{"TeXGyreHeros-Regular:mode=harf","NotoColorEmoji:mode=harf"}
+)}
+\setmonofont{Fira Mono}[	RawFeature={fallback=codefallback},LetterSpace=2.0]
+
+\setbeamertemplate{sidebar right}{}
+
+
+\setmainfont[Extension=.ttf]{Mona-Sans}[	RawFeature={fallback=codefallback},LetterSpace=1.0]
+\setsansfont[Extension=.ttf]{Mona-Sans}[	RawFeature={fallback=codefallback},LetterSpace=1.0]
+\renewcommand*{\familydefault}{\sfdefault}
+\newfontfamily{\DisplayHeadlineFont}{GabriellaHeavy}[FakeStretch=.655,LetterSpace=2.0,RawFeature={fallback=codefallback},]% font manually adjusted by overlaying the desing guideline
+\newfontfamily{\accentfont}{VCROCDFaux}[Extension=.ttf,RawFeature={fallback=codefallback}]
+\newfontfamily{\HeadlineFont}{GabriellaHeavy}[	RawFeature={fallback=codefallback}]
+
+\setmonofont{Fira Code}[
+	Scale=.9,
+  Contextuals=Alternate  % Activate the calt feature
+]
+
+\RequirePackage{unicode-math}%resolve font warnings
+
+
+%Color definitions
+\RequirePackage{transparent}
+
+\pgfkeys{/metropolis/color/.cd,
+	background=light,
+	block=fill,
+}
+
+\setbeamercolor{localstructure}{fg=white}
+\setbeamercolor{structure}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+
+\ExplSyntaxOn
+\setbeamercolor*{frametitle}{fg=white ,bg=}
+\ExplSyntaxOff
+\setbeamerfont{frametitle}{family=\DisplayHeadlineFont,size=\Huge,series=\mdseries}
+
+
+\setbeamercolor{progress bar}{%
+	fg=white,
+	bg=
+}
+
+\setbeamercolor{title separator}{
+	use=progress bar,
+	parent=progress bar
+}
+\setbeamercolor{progress bar in head/foot}{%
+	use=progress bar,
+	parent=progress bar
+}
+
+\setbeamercolor{normal text}{fg=black!15}
+\setbeamercolor{background canvas}{bg=black}
+
+
+\setbeamercolor{progress bar in section page}{
+	use=progress bar,
+	parent=progress bar
+}
+
+\setbeamerfont*{title}{family=\DisplayHeadlineFont,size*={35pt}{47pt}}%\huge}
+\setbeamerfont*{subtitle}{family=\DisplayHeadlineFont,size*={15pt}{15pt}}
+
+\setbeamerfont*{author}{family=\normalfont,, size=\normalsize}
+\setbeamerfont*{institute}{family=\normalfont, size=\normalsize}
+
+\setbeamertemplate{title graphic}{
+	\vbox to 0pt {
+		\vspace*{\baselineskip}
+		\inserttitlegraphic
+	}%
+	\nointerlineskip%
+	\vspace{3\baselineskip}
+}
+
+\newcounter{titleindent}
+
+
+\RequirePackage{accsupp}
+
+\ExplSyntaxOn
+
+\setbeamertemplate{title}{
+	\inserttitle
+}
+
+
+\setbeamertemplate{subtitle}{
+	\insertsubtitle
+}
+
+\ExplSyntaxOff
+
+\makeatletter
+
+\setbeamertemplate{title separator}{
+	\vspace*{-.5\baselineskip}
+	\textcolor{fg}{\rule{\textwidth}{\metropolis@titleseparator@linewidth}}
+}
+
+
+\ExplSyntaxOff
+\AtBeginSection{
+	\ifbeamer@inframe
+	\sectionpage
+	\else
+	\frame[c,noframenumbering]{\sectionpage}
+	\fi
+}
+
+
+\usetikzlibrary{math}
+
+\renewcommand*{\sectionpage}{
+	\centering
+	\begin{minipage}{22em}
+		\raggedright
+		\usebeamercolor[fg]{section title}
+		\usebeamerfont{section title}
+		\insertsectionhead\\[-1ex]
+		\usebeamertemplate*{progress bar in section page}
+		\par
+		\ifx\insertsubsectionhead\@empty\else%
+		\usebeamercolor[fg]{subsection title}%
+		\usebeamerfont{subsection title}%
+		\insertsubsectionhead
+		\fi
+	\end{minipage}
+}
+
+
+
+\setbeamercolor{title page}{fg=white}
+
+\setbeamertemplate{title page}{%
+	\vspace*{\fill}
+	\vbox to \dimexpr\paperheight - 5mm\relax {
+	\vspace{15mm}
+	\begin{beamercolorbox}{title page}%Hard coded, since hard coded in beamer.cls
+%	\vspace{8mm}
+	\centering
+				\ifx\inserttitle\@empty\else
+					\usebeamertemplate*{title}\par
+					\bigskip
+					\ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+				\fi%
+				\par\vskip1ex plus 1 fill\relax
+				\inserttitlegraphic
+				\par\vskip1ex plus 1 fill\relax
+				\ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+				\par
+				\ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+				\par
+	\end{beamercolorbox}\par
+	\vfill
+		\leavevmode\strut
+		\makebox[\linewidth][c]{\makebox[\dimexpr\paperwidth-1cm]{\insertdate\hspace*{\fill}\insertlogo\hspace*{5mm}}}
+		\par
+	\vss
+	}
+}
+
+\titlegraphic{\makebox[.1\textwidth][l]{\raisebox{0pt}[0pt][0pt]{\includegraphics[width=.15\textwidth]{Fisty-sprayed-Stencil_Neonpink}}}}
+
+\def\maketitle{%
+	\ifbeamer@inframe
+	\titlepage
+	\else
+	\frame[plain,noframenumbering]{\titlepage}
+	\fi
+}
+\def\titlepage{%
+	\usebeamertemplate{title page}
+}
+
+\urlstyle{same}
+\DeclareUrlCommand\output@email{\urlstyle{same}\def\UrlLeft{<}\def\UrlRight{>}}
+\newcommand*{\email}[1]{\href{mailto:#1}{\output@email{#1}}}
+
+\pdfstringdefDisableCommands{\renewcommand*{\email}[1]{}}
+
+%LaTeX Logo kerning adjustment
+\DeclareRobustCommand{\LaTeX}{%
+	{L\setbox\z@\hbox{\check@mathfonts \fontsize\sf@size\z@
+			\math@fontsfalse\selectfont A}\kern-.57\wd\z@
+		\sbox\tw@ T\vbox to \ht\tw@{\copy\z@ \vss}\kern-.2\wd\z@}%
+	{%
+		\ifdim\fontdimen1\font=\z@ \else \count\z@=\fontdimen5\font
+		\multiply\count\z@ by 64\relax\divide\count\z@ by\p@
+		\count\tw@=\fontdimen1\font \multiply\count\tw@ by\count\z@
+		\divide\count\tw@ by 64\relax\divide\count\tw@ by\tw@
+		\kern-\the\count\tw@ sp\relax\fi}%
+	\TeX}
+
+
+
+
+\definecolor{37c3-gray0}{HTML}{ffffff}
+\definecolor{37c3-gray1}{HTML}{d9d9d9}
+\definecolor{37c3-gray2}{HTML}{aaaaaa}
+\definecolor{37c3-gray3}{HTML}{7a7a7a}
+\definecolor{37c3-gray4}{HTML}{202020}
+
+\definecolor{37c3-blue0}{HTML}{2d42ff}
+\definecolor{37c3-blue1}{HTML}{0b1575}
+
+\definecolor{37c3-red0}{HTML}{de4040}
+\definecolor{37c3-red1}{HTML}{561010}
+
+\definecolor{37c3-green0}{HTML}{79ff5e}
+\definecolor{37c3-green1}{HTML}{2b8d18}
+
+\definecolor{37c3-cyan0}{HTML}{29ffff}
+\definecolor{37c3-cyan1}{HTML}{006b6b}
+
+\definecolor{37c3-pink0}{HTML}{de37ff}
+\definecolor{37c3-pink1}{HTML}{66007a}
+
+\definecolor{37c3-yellow0}{HTML}{f6f675}
+\definecolor{37c3-yellow1}{HTML}{757501}
+
+\setbeamerfont{number item}{size=\Huge,family=\accentfont}%*={42pt}{50pt},
+
+\newcommand*{\NumberItem}[2]{\null\hfill\makebox[0pt][c]{\begin{tabular}[t]{@{}c@{}}%
+			\noalign{\vskip2pt}
+			\usebeamercolor[fg]{palette secondary}\usebeamerfont{number item}#1\\
+			\usebeamercolor[fg]{palette primary}#2\\
+			\noalign{\vskip3pt}
+	\end{tabular}}\hfill\null}
+
+
+\usepackage{trimclip}
+
+\ExplSyntaxOn
+
+%setup to support rightimage/image frame options
+
+\clist_map_inline:nn {rightimage, rightimage*, image, image*} {
+	\define@key{beamerframe}{#1}{
+		\keys_set:nn {ptxcd/beamer/outer} {
+			slide/#1=##1
+		}
+	}
+}
+
+
+\bool_new:N \l_ptxcd_half_slide_bool 
+\cs_set_eq:NN \__ptxcd_backround_image: \c_empty_tl
+\dim_new:N \l_ptxcd_image_text_sep_dim
+\dim_set:Nn \l_ptxcd_image_text_sep_dim {1em}
+\box_new:N \l__ptxcd_background_box
+
+\keys_define:nn {ptxcd/beamer/outer} {
+	slide .choice:,
+	slide / rightimage .code:n = \cs_set:Nn \__ptxcd_backround_image: {\hbox:n {#1}}\bool_set_true:N \l_ptxcd_half_slide_bool,
+	slide / rightimage* .code:n = \cs_set:Nn \__ptxcd_backround_image: {\__ptxcd_autosize_image:nnn {.5\paperwidth} {\paperheight-\l_ptxcd_frametitle_dim} {#1}}\bool_set_true:N \l_ptxcd_half_slide_bool,
+	slide / image .code:n = \cs_set:Nn \__ptxcd_backround_image: {\hbox:n {#1}}\bool_set_false:N \l_ptxcd_half_slide_bool,
+	slide / image* .code:n = \cs_set:Nn \__ptxcd_backround_image: {\__ptxcd_autosize_image:nnn  {\paperwidth} {\paperheight-\l_ptxcd_frametitle_dim} {#1}}\bool_set_false:N \l_ptxcd_half_slide_bool,
+}
+
+
+\cs_new:Nn \__ptxcd_autosize_image:nnn {
+	\hbox_set:Nn \l__ptxcd_background_box {\raisebox{\depth}{#3}}
+	\box_resize_to_wd:Nn \l__ptxcd_background_box {#1}
+	\dim_compare:nTF {\box_ht:N \l__ptxcd_background_box - (\dim_eval:n {#2}) > \c_zero_dim}
+		{
+			\dim_set:Nn \l_tmpa_dim {.5\box_ht:N \l__ptxcd_background_box - (#2)/2}
+			\clipbox{0pt~\dim_eval:n{\l_tmpa_dim}~0pt~\dim_eval:n{\l_tmpa_dim}}{\box_use:N \l__ptxcd_background_box}
+		}{
+			\box_resize_to_ht:Nn \l__ptxcd_background_box {#2}
+			\dim_set:Nn \l_tmpa_dim {(\box_wd:N \l__ptxcd_background_box - (\dim_eval:n {#1})) / 2}
+			\clipbox{\dim_eval:n{\l_tmpa_dim}~0pt~\dim_eval:n{\l_tmpa_dim}~0pt}{\box_use:N \l__ptxcd_background_box}
+	}
+}
+
+
+\hook_gput_code:nnn {env/beamer@framepauses/begin} {ptxcd/half-slide} {
+	\cs_if_eq:NNF  \__ptxcd_backround_image: \c_empty_tl {
+		\dim_set:Nn \hsize {.5\hsize-\l_ptxcd_image_text_sep_dim }
+		\dim_set:Nn \textwidth {.5\textwidth-\l_ptxcd_image_text_sep_dim }
+		\dim_set:Nn \linewidth {\textwidth}
+	}
+}
+
+\hook_gput_code:nnn {env/frame/before} {ptxcd/reset-slide} {
+	\cs_set_eq:NN \__ptxcd_backround_image: \c_empty_tl
+	\bool_set_false:N \l_ptxcd_half_slide_bool
+}
+
+\dim_new:N  \l_ptxcd_frametitle_dim
+
+\setbeamertemplate{background~canvas}{
+	\ifx\insertframetitle\@empty
+	\else
+		\vbox_set:Nn \l_tmpa_box{
+			\usebeamertemplate{frametitle}
+		}
+		\dim_set:Nn \l_ptxcd_frametitle_dim {\box_ht:N \l_tmpa_box + \box_dp:N \l_tmpa_box }
+		\dim_compare:nNnT  {\l_ptxcd_frametitle_dim}   > {\c_zero_dim} {\dim_add:Nn \l_ptxcd_frametitle_dim {1ex} }
+	\fi
+
+	\cs_if_eq:NNTF  \__ptxcd_backround_image: \c_empty_tl {
+		\color{bg}\vrule width\paperwidth height\paperheight
+	}{
+		\hskip1cm
+			\begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=0pt]{background~canvas}
+					\bool_if:NTF \l_ptxcd_half_slide_bool {\leavevmode\hfill} {\centering}\__ptxcd_backround_image:
+			\end{beamercolorbox}
+	}
+}
+
+\ExplSyntaxOff
+
+\endinput

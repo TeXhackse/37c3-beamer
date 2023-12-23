@@ -1,0 +1,170 @@
+% !TeX program=lualatex
+
+%Requires lualatex or xelatex and installed fontss
+\documentclass[aspectratio=169,t]{beamer}
+\usetheme{37c3}
+
+\usepackage{layout}
+
+%local definitions, generally not necessary
+\newcommand*{\code}[1]{\texttt{#1}}
+
+\graphicspath{{.}{resources/}}
+
+\usepackage[jekyllData,
+headerAttributes,
+import=witiko/graphicx/http,
+linkAttributes=true,
+]{markdown}
+
+% Only download if not available
+\ExplSyntaxOn
+\makeatletter
+\newcommand{\imageRenderer}[4]{%
+\begin {figure}\centering\includegraphics {#3}
+\ifx\empty #4\empty \else \caption {#4}\fi
+\end {figure}
+}
+
+\newcommand*{\check@if@image@local}[3]{
+	\bool_set_false:N \l_tmpa_bool
+	\clist_map_inline:Nn \Gin@extensions {
+		\file_if_exist:nT {#1##1} {\bool_set_true:N \l_tmpa_bool}
+	}
+%	\bool_show:N \l_tmpa_bool
+	\bool_if:NTF \l_tmpa_bool  {#2} {#3}
+}
+\ExplSyntaxOff
+
+\begingroup
+\catcode`\%=12
+\catcode`\^^A=14
+\global\def\markdownRendererImage#1#2#3#4{^^A
+	\check@if@image@local{#3}{\imageRenderer{#1}{#2}{#3}{#4}^^A
+	}{^^A
+  \begingroup
+    \edef\filename{\markdown@witiko@graphicx@http@filename}^^A
+    \markdownIfOption{frozenCache}{}{^^A
+      \immediate\write18{^^A
+        mkdir -p "\markdownOptionCacheDir";
+        if printf '%s' "#3" | grep -q -E '^https?:';
+        then
+          OUTPUT_PREFIX="\markdownOptionCacheDir";
+          OUTPUT_BODY="$(printf '%s' '#3' | md5sum | cut -d' ' -f1)";
+          OUTPUT_SUFFIX="$(printf '%s' '#3' | sed 's/.*[.]//')";
+          OUTPUT="$OUTPUT_PREFIX/$OUTPUT_BODY.$OUTPUT_SUFFIX";
+          if ! [ -e "$OUTPUT" ];
+          then
+            \markdown@witiko@graphicx@http@download{'#3'}{"$OUTPUT"};
+            printf '%s' "$OUTPUT" > "\filename";
+          fi;
+        else
+          printf '%s' '#3' > "\filename";
+        fi}}^^A
+      \CatchFileDef{\filename}{\filename}{\endlinechar=-1}^^A
+      \imageRenderer{#1}{#2}{\filename}{#4}^^A
+  \endgroup}^^A
+  \global\advance\markdown@witiko@graphicx@http@counter by 1\relax}^^A
+\endgroup
+
+
+\markdownSetup{
+	renderers = {
+		thematicBreak={TEST}
+	},
+%	attributeKeyValue={\keys_set:nn {ptxcd/37c3-beamer}{#1={#2}}}
+}
+
+\ExplSyntaxOn
+\clist_map_inline:nn {rightimage, image} {
+	\keys_define:nn {ptxcd/37c3-beamer/header} {
+		#1 .meta:nn =  {ptxcd/beamer/outer/slide} {#1*=\includegraphics{##1}}
+	}
+}
+
+\keys_define:nn {ptxcd/37c3-beamer/image} {
+	unknown .code:n =  \setkeys{Gin}{\l_keys_key_tl = #1}%
+}
+
+\hook_gremove_code:nn {env/frame/before} {ptxcd/reset-slide} 
+
+\def\markdownRendererHeaderAttributeContextBegin{
+	\cs_set_eq:NN \__ptxcd_backround_image: \c_empty_tl
+	\bool_set_false:N \l_ptxcd_half_slide_bool
+}
+
+\tl_new:N \l_ptxcd_attribute_context_tl 
+\def\markdownRendererHeaderAttributeContextEnd{\endgroup}
+\def\markdownRendererImageAttributeContextEnd{\endgroup}
+
+\renewcommand*{\markdownRendererImageAttributeContextBegin}{\begingroup\tl_set:Nn \l_ptxcd_attribute_context_tl {image}}
+\renewcommand*{\markdownRendererHeaderAttributeContextBegin}{\begingroup\tl_set:Nn \l_ptxcd_attribute_context_tl {header}}
+
+\renewcommand*{\markdownRendererAttributeKeyValue}[2]{\exp_args:Nx \keys_set:nn {ptxcd/37c3-beamer/\l_ptxcd_attribute_context_tl }{#1={#2}}}
+
+\def\markdownRendererHeaderAttributeContextEnd{
+	\cs_gset_eq:NN \__ptxcd_backround_image: \c_empty_tl
+	\bool_gset_false:N \l_ptxcd_half_slide_bool
+}
+
+\tl_new:N \l__markdown_sequence_tl
+
+\markdownSetup{
+	rendererPrototypes = {
+		jekyllDataString = {\keys_set:nn {Markdown/Template/jekyllData}{{#1} = {#2}}},
+		jekyllDataNumber = {\keys_set:nn {Markdown/Template/jekyllData}{{#1} = {#2}}},
+		jekyllDataBoolean = {\keys_set:nn {Markdown/Template/jekyllData}{{#1} = {#2}}},
+		jekyllDataEmpty = {\keys_set:nn {Markdown/Template/jekyllData}{{#1} = }},
+		jekyllDataSequenceBegin = {
+			\begingroup
+			\renewcommand*{\markdownRendererJekyllDataString}[2]{
+			\seq_if_exist:cF {g__ptxcd_#1_seq}  {\seq_new:c {g__ptxcd_#1_seq}}
+			\seq_gput_right:cn {g__ptxcd_#1_seq} {##2}
+		}},
+		jekyllDataSequenceEnd = {
+			\endgroup
+		}
+	}
+}
+
+\keys_define:nn {Markdown/Template/jekyllData} {
+	title .code:n = \title{#1},
+	author .code:n = \author{#1},
+	subtitle .code:n = \subtitle{#1},
+	team .code:n = \institute{#1},
+	titlegraphic .code:n =  \titlegraphic{#1},
+	unknown .code:n = {\exp_args:Nc \gdef {insert\l_keys_key_tl} {#1}},
+}
+
+\renewcommand\markdownRendererJekyllDataBegin{
+	\def\inserttitle\@empty
+	\author{}\institute{}\titlegraphic{}\subtitle{}
+}
+
+\renewcommand\markdownRendererJekyllDataEnd{
+	\ifx\inserttitle\@empty\else
+	\begin{frame}\titlepage\end{frame}
+	\fi
+	\char_set_catcode_other:N\%
+}
+
+\long\def\markdownRendererHeadingOne#1#2\markdownRendererThematicBreak{
+	\begin{frame}{#1}
+	#2
+	\end{frame}
+}
+\ExplSyntaxOff
+
+\long\def\markdownRendererHeadingTwo#1#2\markdownRendererThematicBreak{
+	\begin{frame}{#1}
+	#2
+	\end{frame}
+}
+\logo{\includegraphics[width=2cm]{37c3-logo-full}}
+
+\date{}
+\begin{document}
+
+\markdownInput{\MarkDownInputFile}
+
+\end{document}
