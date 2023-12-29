@@ -1,0 +1,31 @@
+ensure_path('TEXINPUTS','tex/', '.');
+ensure_path('LUAINPUTS','tex/', '.');
+
+$force_mode=1; # also run if file is not there
+
+@default_files=("*.tex","*.md");
+@default_excluded_files = ("*_content.md", "README.md", "readme.md");
+
+$pdf_mode = 4;
+$do_cd = 0;
+
+$lualatex= 'internal ptxbuild %P';
+
+sub ptxbuild {
+    my $url = pop @_;
+	
+	my @pieces;
+	map { push(@pieces,$_) } split(/\//,$url);
+	my $padname  = pop(@pieces);
+	
+	if (! $jobname) {
+		$jobname="$padname"
+	}
+
+	$markdownfile = "$jobname.md";
+	system("wget -O $markdownfile $url/download/markdown");
+	$return = system ("lualatex --shell-escape --jobname=$jobname '\\def\\MarkDownInputFile{$markdownfile}\\input{37c3-markdown-wrapper.tex}'");
+    return $return;
+}
+
+push @generated_exts, 'md';
